@@ -19,7 +19,8 @@ const Home = () => {
   }, [])
   return (
     <div style={{ marginTop: "150px" }}>
-      <Link to="/addPassword">
+      <h2>Administrator Menu</h2>
+      <Link to="/addUser">
         <button className="btn btn-password">Add User</button>
       </Link>
       <table className="styled-table">
