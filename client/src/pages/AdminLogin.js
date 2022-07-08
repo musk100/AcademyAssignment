@@ -2,9 +2,6 @@ import React, { useState, useEffect } from "react"
 import { Form, Button } from "react-bootstrap"
 import "./AdminLogin.css"
 import Axios from "axios"
-//Load an icon library to show a hamburger menu (bars) on small screens
-import { Navigate } from "react-router-dom"
-;<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
 
 function AdminLogin(props) {
   const [username, setUsername] = useState("")
@@ -14,6 +11,10 @@ function AdminLogin(props) {
     e.preventDefault()
     try {
       const response = await Axios.post("http://localhost:5000/login", { username, password })
+      if (response.data) {
+        console.log(response.data)
+        props.setLoggedIn(true)
+      }
       console.log(response.data)
     } catch (e) {
       console.log("There was a problem")

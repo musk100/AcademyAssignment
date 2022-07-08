@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import "./Home.css"
+import { toast } from "react-toastify"
 import axios from "axios"
 
 const Home = () => {
@@ -16,6 +17,14 @@ const Home = () => {
   useEffect(() => {
     loadData()
   }, [])
+
+  const deleteContact = id => {
+    if (window.confirm("Are you sure you want to delete this contact?")) {
+      axios.delete(`http://localhost:5000/api/remove/${id}`)
+      toast.success("Contact Deleted Successfully")
+      setTimeout(() => loadData(), 500)
+    }
+  }
   return (
     <div style={{ marginTop: "150px" }}>
       <h2>Administrator Menu</h2>
@@ -46,7 +55,9 @@ const Home = () => {
                   <Link to={`/update/${item.id}`}>
                     <button className="btn btn-edit">Edit</button>
                   </Link>
-                  <button className="btn btn-delete">Delete</button>
+                  <button className="btn btn-delete" onClick={() => deleteContact(item.id)}>
+                    Delete
+                  </button>
                   <Link to={`/view/${item.id}`}>
                     <button className="btn btn-view">View</button>
                   </Link>

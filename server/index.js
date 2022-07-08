@@ -1,6 +1,5 @@
 const express = require("express")
 const app = express()
-
 const cors = require("cors")
 const { response, request } = require("express")
 const connection = require("./config/Database")
@@ -9,6 +8,8 @@ const DisableController = require("./Controllers/DisableController")
 const LoginController = require("./Controllers/LoginController")
 
 app.use(express.json())
+
+app.use(cors())
 
 app.get("/api/get", (request, response) => {
   const sqlGet = "SELECT * FROM taskmanagement_db"

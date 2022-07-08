@@ -1,6 +1,6 @@
-/*Add style to username textbox*/
+/*Add style to username textbox */
 input[type="text"] {
-  width: 30%;
+  width: 400px;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
@@ -8,15 +8,20 @@ input[type="text"] {
   border-radius: 4px;
   box-sizing: border-box;
 }
+
 /*Add style to password textbox*/
 input[type="password"] {
-  width: 30%;
+  width: 400px;
   padding: 12px 20px;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+}
+
+Button[type="submit"] {
+  background-color: cornflowerblue;
 }
 
 .label {

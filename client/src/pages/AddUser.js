@@ -1,50 +1,50 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate, useParams, Link } from "react-router-dom"
-import "./AddUser.css"
+import "./AddUser.module.css"
 import axios from "axios"
 import { toast, ToastContainer } from "react-toastify"
 
+const initialState = {
+  name: "",
+  email: "",
+  password: "",
+  usergroup: ""
+}
+
 const AddEdit = () => {
-  // const [state, setState] = useState(initialState)
+  const [state, setState] = useState(initialState)
+
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [usergroup, setUserGroup] = useState("")
 
-  // const { username, email, password, usergroup } = state
-
   const navigate = useNavigate()
+
+  const { id } = useParams()
 
   const handleSubmit = e => {
     e.preventDefault()
     if (!username || !email || !password || !usergroup) {
       toast.error("Please provide value for each input field!", { autoClose: 2000 })
     } else {
-      axios
-        .post("http://localhost:5000/api/post", {
-          username,
-          email,
-          password,
-          usergroup
-        })
-        // .then(() => {
-        //   setState({ username: "", email: "", password: "", usergroup: "" })
-        // })
-        .catch(err => toast.error(err.response.data))
-      //navigate towards home page once the user is added Timeout set at 500ms delay
-      toast.success("Contact Added Successfully!")
-      setTimeout(() => navigate("/"), 500)
+      if (!id) {
+        axios
+          .post("http://localhost:5000/api/post", {
+            username,
+            email,
+            password,
+            usergroup
+          })
+          .then(() => {
+            setState({ username: "", email: "", password: "", usergroup: "" })
+          })
+          .catch(err => toast.error(err.response.data))
+      }
+
+      setTimeout(() => navigate("/mainmenu"), 500)
     }
   }
-  // type="text"
-  // id="usergroup"
-  // name="usergroup"
-  // placeholder="User Group ..."
-  // value={usergroup}
-  // onChange={event => {
-  //   setUserGroup(event.target.value)
-  // }}
-  ///>
 
   // const handleInputChange = event => {
   //   const { username, value } = event.target
@@ -70,7 +70,7 @@ const AddEdit = () => {
           id="name"
           name="name"
           placeholder="Name ..."
-          value={username}
+          value={username || ""}
           maxLength="12"
           onChange={event => {
             setUsername(event.target.value)
@@ -83,7 +83,7 @@ const AddEdit = () => {
           id="email"
           name="email"
           placeholder="Email ..."
-          value={email}
+          value={email || ""}
           onChange={event => {
             setEmail(event.target.value)
           }}
@@ -94,27 +94,24 @@ const AddEdit = () => {
           id="password"
           name="password"
           placeholder="Password ..."
-          value={password}
+          value={password || ""}
           maxLength="12"
           onChange={event => {
             setPassword(event.target.value)
           }}
         />
         <label htmlFor="usergroup">User Group</label>
-        <select name="dropdown">
-          <option value="" disabled selected>
-            Select a User Group ...
-          </option>
-          <option value="Administrator">Administrator</option>
-          <option value="Project Lead">Project Lead</option>
-          <option value="Project Manager">Project Manager</option>
-          <option value="Dev Ops">Team Member</option>
-          onChange=
-          {event => {
+        <input
+          type="text"
+          id="usergroup"
+          name="usergroup"
+          placeholder="User Group ..."
+          value={usergroup || ""}
+          onChange={event => {
             setUserGroup(event.target.value)
           }}
-        </select>
-        <input type="submit" value="Save" />
+        />
+        <input type="submit" value={id ? "Update" : "Save"} />
         <Link to="/mainMenu">
           <input type="button" value="Go Back" />
         </Link>

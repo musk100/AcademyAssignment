@@ -7,6 +7,7 @@ import Home from "./pages/Home"
 import AdminLogin from "./pages/AdminLogin"
 import { useEffect, useState } from "react"
 import { Axios } from "axios"
+import View from "./pages/View"
 
 function App() {
   return (
@@ -14,9 +15,11 @@ function App() {
       <div className="App">
         <ToastContainer position="top-center" />
         <Routes>
-          <Route exact path="/mainMenu" element={<Home />} />
+          <Route exact path="/mainmenu" element={<Home />} />
           <Route path="/" element={<AdminLogin />} />
           <Route path="/addUser" element={<AddEdit />} />
+          <Route path="/update/:id" element={<AddEdit />} />
+          <Route path="/view/:id" element={<View />} />
         </Routes>
       </div>
     </BrowserRouter>
