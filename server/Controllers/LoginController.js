@@ -1,64 +1,67 @@
 const connection = require("../config/Database")
-const jwt = require("jsonwebtoken")
 const { request, response } = require("express")
 const cookieParser = require("cookie-parser")
 const session = require("express-session")
 const bodyParser = require("body-parser")
 const express = require("express")
 const app = express()
-const path = require("path")
-
-app.use(cookieParser())
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(
-  session({
-    secret: "secret",
-    resave: true,
-    saveUninitialized: true
-  })
-)
-
+const saltRounds = 10
 //hasshing password
 const bcrypt = require("bcrypt")
-const saltRound = 10
 
 const login = function (app) {
-  // app.get("/login", (request, response) => {
-  //   if (request.session.user) {
-  //     response.send({ loggedIn: true, user: request.session.user })
-  //   } else {
-  //     response.send({ loggedIn: false })
-  //   }
-  // })
+  app.use(express.json())
+  app.use(cookieParser())
+  app.use(bodyParser.urlencoded({ extended: true }))
+  app.use(
+    session({
+      key: "userId",
+      secret: "atanu",
+      resave: false,
+      saveUninitialized: false
+    })
+  )
+
   app.post("/login", (request, response) => {
     //login user
     const username = request.body.username
     const password = request.body.password
+    //'${username}'
+    const sqlQuery = "SELECT * FROM taskmanagement_db WHERE username = ? AND password = ?"
 
-    //Ensure the input fields exists and are not empty
-    if (username && password) {
-      connection.query("SELECT * FROM taskmanagement_db WHERE username = ? AND password = ?", [username, password], (error, results) => {
-        //if there is an issue with the query, output the error
-        if (error) {
-          response.send({ error: error })
-        }
-      })
-      //if account exists
+    connection.query(sqlQuery, [username, password], (error, result) => {
+      if (error) throw error
+
       if (result.length > 0) {
-        // Authenticate the user
-        request.session.loggedin = true
-        request.session.username = username
-        // Redirect to home page
-        response.redirect("/mainmenu")
+        request.session.user = result
+        response.send({ login: true, username: username })
       } else {
-        response.send("Incrorrect Username and/or Password")
+        console.log("Invalid username/password")
       }
-      response.end()
-    } else {
-      response.send("Please enter username and Password!")
-      response.end()
-    }
+      // if (error) {
+      //   console.log(error)
+      // } else {
+      //   if (result.length > 0) {
+      //     bcrypt.compare(password, result[0].password, (error, response) => {
+      //       if (response) {
+      //         request.session.user = result
+      //         console.log(result)
+      //         response.send({ login: true, username: username })
+      //       } else {
+      //         response.send({ login: false, msg: "Wrong Password" })
+      //       }
+      //     })
+      //   }
+      // }
+    })
+
+    app.get("/login", (request, response) => {
+      if (request.session.user) {
+        response.send({ login: true, user: request.session.user })
+      } else {
+        response.send({ login: false })
+      }
+    })
   })
 }
-
 module.exports = login

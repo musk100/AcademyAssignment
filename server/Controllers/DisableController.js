@@ -1,6 +1,6 @@
 const connection = require("../config/Database")
 
-module.exports = function (app) {
+const disable = function (app) {
   app.delete("/api/remove/:id", (request, response) => {
     const { id } = request.params
     const sqlRemove = "DELETE FROM taskmanagement_db WHERE id = ?"
@@ -11,3 +11,5 @@ module.exports = function (app) {
     })
   })
 }
+
+module.exports = disable

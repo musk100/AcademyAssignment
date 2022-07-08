@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { useNavigate, useParams, Link } from "react-router-dom"
 import "./AddUser.module.css"
-import axios from "axios"
+import Axios from "axios"
 import { toast, ToastContainer } from "react-toastify"
 
 const initialState = {
@@ -11,8 +11,8 @@ const initialState = {
   usergroup: ""
 }
 
-const AddEdit = () => {
-  const [state, setState] = useState(initialState)
+const EditUser = () => {
+  const [myData, setMyData] = useState([])
 
   const [username, setUsername] = useState("")
   const [email, setEmail] = useState("")
@@ -23,27 +23,16 @@ const AddEdit = () => {
 
   const { id } = useParams()
 
+  const getData = async () => {
+    try {
+      const res = await Axios.get(`http://localhost:5000/api/get/${id}`)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   const handleSubmit = e => {
     e.preventDefault()
-    if (!username || !email || !password || !usergroup) {
-      toast.error("Please provide value for each input field!", { autoClose: 2000 })
-    } else {
-      if (!id) {
-        axios
-          .post("http://localhost:5000/api/post", {
-            username,
-            email,
-            password,
-            usergroup
-          })
-          .then(() => {
-            setState({ username: "", email: "", password: "", usergroup: "" })
-          })
-          .catch(err => toast.error(err.response.data))
-      }
-
-      setTimeout(() => navigate("/mainmenu"), 500)
-    }
   }
 
   return (
@@ -115,4 +104,4 @@ const AddEdit = () => {
   )
 }
 
-export default AddEdit
+export default EditUser

@@ -5,9 +5,8 @@ import "./App.css"
 import AddEdit from "./pages/AddUser"
 import Home from "./pages/Home"
 import AdminLogin from "./pages/AdminLogin"
-import { useEffect, useState } from "react"
-import { Axios } from "axios"
 import View from "./pages/View"
+import EditUser from "./pages/EditUser"
 
 function App() {
   return (

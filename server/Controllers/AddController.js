@@ -1,6 +1,6 @@
 const connection = require("../config/Database")
 
-module.exports = function (app) {
+const Add = function (app) {
   app.post("/api/post", (request, response) => {
     const { username, email, password, usergroup } = request.body
     const sqlInsert = "INSERT INTO taskmanagement_db (username, email, password, usergroup) VALUES (?, ?, ?, ?)"
@@ -11,3 +11,5 @@ module.exports = function (app) {
     })
   })
 }
+
+module.exports = Add
